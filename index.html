@@ -1510,7 +1510,8 @@ body.loaded .hero__foot{opacity:1;transform:none}
         <li>
           <i>↓</i>
           <span class="contact-list__label">简历 <span class="en">Resume</span></span>
-          <a class="contact-list__value" href="#" data-download data-cursor="hover">
+          <!-- ★ 这里改成了你的 PDF 文件路径，并且去掉了 JS 拦截 -->
+          <a class="contact-list__value" href="./LiMeiyan-Resume.pdf" target="_blank" data-cursor="hover">
             下载 PDF <span class="en">Download</span>
           </a>
         </li>
@@ -2434,6 +2435,34 @@ const headIO = new IntersectionObserver(entries => {
 document.querySelectorAll('.sec-head').forEach(el => headIO.observe(el));
 document.querySelectorAll('.timeline__item').forEach(el => io.observe(el));
 
+/* ★ 专门用于手机端判断视频是否在屏幕正中间的观察器 */
+const mobileAutoPlayObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const video = entry.target;
+    if (entry.isIntersecting) {
+      // 进入屏幕中间区域，静音自动播放
+      const p = video.play();
+      if (p && p.catch) p.catch(() => {});
+    } else {
+      // 离开屏幕中间区域，暂停并重置进度
+      video.pause();
+      try { video.currentTime = 0; } catch(e) {}
+      const card = video.closest('.card');
+      if (card) {
+        const pFill = card.querySelector('[data-progress-fill]');
+        const pHandle = card.querySelector('[data-progress-handle]');
+        if (pFill) pFill.style.width = '0%';
+        if (pHandle) pHandle.style.left = '0%';
+      }
+    }
+  });
+}, {
+  root: null,
+  // 上下各缩进 35%，意味着只有当视频处于屏幕正中央的 30% 区域时，才会触发播放
+  rootMargin: '-35% 0px -35% 0px', 
+  threshold: 0.5
+});
+
 function cardHTML(item, index) {
   const isVideo = item.type === 'video';
   const liked = likedSet.has(item.id);
@@ -2530,18 +2559,27 @@ function bindCards(container) {
         try { video.currentTime = 0.001; } catch(e) {}
       }, { once: true });
 
-      card.addEventListener('mouseenter', () => {
-        const p = video.play();
-        if (p && p.catch) p.catch(() => {});
-      });
+      // ★ 判断是否为触屏设备（手机/平板）
+      const isMobileDevice = !isFinePointer;
 
-      card.addEventListener('mouseleave', () => {
-        if (card.classList.contains('is-dragging')) return;
-        video.pause();
-        try { video.currentTime = 0; } catch(e) {}
-        if (progressFill) progressFill.style.width = '0%';
-        if (progressHandle) progressHandle.style.left = '0%';
-      });
+      if (isMobileDevice) {
+        // 手机端：使用观察器，滑到中间自动播放
+        mobileAutoPlayObserver.observe(video);
+      } else {
+        // 电脑端：保持原有的鼠标悬停播放逻辑
+        card.addEventListener('mouseenter', () => {
+          const p = video.play();
+          if (p && p.catch) p.catch(() => {});
+        });
+
+        card.addEventListener('mouseleave', () => {
+          if (card.classList.contains('is-dragging')) return;
+          video.pause();
+          try { video.currentTime = 0; } catch(e) {}
+          if (progressFill) progressFill.style.width = '0%';
+          if (progressHandle) progressHandle.style.left = '0%';
+        });
+      }
 
       video.addEventListener('timeupdate', () => {
         if (!progressFill) return;
@@ -2969,12 +3007,7 @@ initScrollSpy();
 (function initAnchorNavigation(){
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', function(e){
-      if (this.hasAttribute('data-download')) {
-        e.preventDefault();
-        toast('简历 PDF 请联系我获取', 'Contact me for resume', '↓');
-        return;
-      }
-
+      // PDF下载的拦截已被删除，现在直接跳转
       const href = this.getAttribute('href') || '';
       if (href === '#') {
         e.preventDefault();

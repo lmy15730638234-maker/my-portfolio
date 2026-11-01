@@ -558,9 +558,11 @@ body.loaded .hero__foot{opacity:1;transform:none}
   font-variant-numeric:tabular-nums;
   padding-bottom:10px;
   border-bottom:1px solid rgba(255,255,255,.08);}
-.card__stats .stat{display:flex;align-items:center;gap:6px;}
+.card__stats .stat{display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.card__stats .stat__label{font-size:9px;letter-spacing:.08em;color:rgba(255,255,255,.56);}
+.card__stats .stat__value{font-size:11.5px;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.88);}
 .card__stats .stat svg{width:13px;height:13px;transition:transform .3s var(--ease);}
-.card__stats .stat--star svg{fill:rgba(255,210,100,.92);
+.card__stats .stat--favorite svg{fill:rgba(255,210,100,.92);
   stroke:rgba(255,210,100,.92);stroke-width:1;}
 .card__stats .stat--like svg{fill:rgba(255,120,140,.92);
   stroke:rgba(255,120,140,.92);stroke-width:1;}
@@ -1007,6 +1009,7 @@ body.loaded .hero__foot{opacity:1;transform:none}
 .act.is-active{background:var(--gold);border-color:var(--gold);color:#08080a}
 .act.is-active svg{fill:currentColor;stroke:none}
 .act .en{font-size:8px;letter-spacing:.2em;text-transform:uppercase;opacity:.75}
+.act [id$='Count']{font-variant-numeric:tabular-nums;}
 
 .act .plus-one{
   position:absolute;right:8px;top:-2px;
@@ -1862,14 +1865,13 @@ body.has-cursor.image-lightbox-open .image-lightbox button{
           去红果看 <span class="en">Watch</span>
         </a>
 
-        <button class="act" id="lbLike" data-cursor="hover">
+        <button class="act" id="lbLike" data-cursor="hover" aria-pressed="false">
           <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.5-9A5.3 5.3 0 0 1 12 6a5.3 5.3 0 0 1 9.5 6c-2 4.4-9.5 9-9.5 9z"/></svg>
-          <span id="lbLikeCount">0</span> 热度 <span class="en">Heat</span>
-          <span class="plus-one">+1</span>
+          <span id="lbLikeCount">——</span> 点赞 <span class="en">Like</span>
         </button>
-        <button class="act" id="lbSave" data-cursor="hover">
+        <button class="act" id="lbSave" data-cursor="hover" aria-pressed="false">
           <svg viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.2L5 21V4a1 1 0 0 1 1-1z"/></svg>
-          收藏 <span class="en">Save</span>
+          <span id="lbSaveCount">——</span> 收藏 <span class="en">Save</span>
         </button>
         <button class="act" id="lbShare" data-cursor="hover">
           <svg viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/></svg>
@@ -1927,7 +1929,7 @@ const MEDIA = [
     src: videoUrl('平头哥.mp4'),
     poster:'./images/pintou.jpg',
     link:'https://novelquickapp.com/s/sKGJf6QtkDs/',
-    likes:4600, stars:'6万', likesCount:'1802' },
+    heatWan:4600, favoriteCount:'6万', likeCount:'1802' },
 
   { id:'pump', type:'video', size:'sm',
     category:'AI真人剧', categoryEn:'AI Live-Action',
@@ -1935,7 +1937,7 @@ const MEDIA = [
     src: videoUrl('强拆排污泵后.mp4'),
     poster:'./images/pump.jpg',
     link:'https://novelquickapp.com/s/D-cTzJsaw8I/',
-    likes:0, stars:'——', likesCount:'——' },
+    heatWan:0, favoriteCount:'——', likeCount:'——' },
 
   { id:'hunt', type:'video', size:'md',
     category:'AI真人剧', categoryEn:'AI Live-Action',
@@ -1943,7 +1945,7 @@ const MEDIA = [
     src: videoUrl('赶猎.mp4'),
     poster:'./images/hunt.jpg',
     link:'https://novelquickapp.com/s/vx1QL-ZUZts/',
-    likes:4700, stars:'17.7万', likesCount:'9982' },
+    heatWan:4700, favoriteCount:'17.7万', likeCount:'9982' },
 
   { id:'sea', type:'video', size:'md',
     category:'AI真人剧', categoryEn:'AI Live-Action',
@@ -1951,7 +1953,7 @@ const MEDIA = [
     src: videoUrl('赶海.mp4'),
     poster:'./images/sea.jpg',
     link:'https://novelquickapp.com/s/r2zsJrAOJOU/',
-    likes:4400, stars:'2.1万', likesCount:'2603' },
+    heatWan:4400, favoriteCount:'2.1万', likeCount:'2603' },
 
   { id:'guan', type:'video', size:'sm',
     category:'AI真人剧', categoryEn:'AI Live-Action',
@@ -1959,7 +1961,7 @@ const MEDIA = [
     src: videoUrl('西出函谷关.mp4'),
     poster:'./images/guan.jpg',
     link:'https://novelquickapp.com/s/CGgLF-Cx-SM/',
-    likes:4200, stars:'2.1万', likesCount:'1928' },
+    heatWan:4200, favoriteCount:'2.1万', likeCount:'1928' },
 
   /* ========== AI 漫剧 ========== */
   { id:'tianshi', type:'video', size:'lg',
@@ -1968,7 +1970,7 @@ const MEDIA = [
     src: videoUrl('天师.mp4'),
     poster:'./images/天师.jpg',
     link:'https://novelquickapp.com/s/7Ld6ZfVgCT0/',
-    likes:4500, stars:'13.1万', likesCount:'2.9万' },
+    heatWan:4500, favoriteCount:'13.1万', likeCount:'2.9万' },
 
   { id:'liyu', type:'video', size:'md',
     category:'AI漫剧', categoryEn:'AI Comic',
@@ -1976,48 +1978,48 @@ const MEDIA = [
     src: videoUrl('鲤鱼.mp4'),
     poster:'./images/鲤鱼.jpg',
     link:'https://novelquickapp.com/s/pz8V8fwf2ew/',
-    likes:3600, stars:'1.2万', likesCount:'2611' },
+    heatWan:3600, favoriteCount:'1.2万', likeCount:'2611' },
 
   { id:'kuangsi', type:'video', size:'sm',
     category:'AI漫剧', categoryEn:'AI Comic',
     title:'开局狂死，我靠送死绝境逆袭', titleEn:'Die to Win',
     src: videoUrl('开局狂死.mp4'),
     poster:'./images/狂死.jpg',
-    link:'#', likes:4300, stars:'9.5万', likesCount:'8822' },
+    link:'#', heatWan:4300, favoriteCount:'9.5万', likeCount:'8822' },
 
   { id:'fanren', type:'video', size:'sm',
     category:'AI漫剧', categoryEn:'AI Comic',
     title:'别拜了，我真是凡人', titleEn:'Stop Worshipping Me',
     src: videoUrl('凡人.mp4'),
     poster:'./images/凡人.jpg',
-    link:'#', likes:4100, stars:'4.5万', likesCount:'1万' },
+    link:'#', heatWan:4100, favoriteCount:'4.5万', likeCount:'1万' },
 
   { id:'bailian', type:'video', size:'md',
     category:'AI漫剧', categoryEn:'AI Comic',
     title:'系统赐我百炼身', titleEn:'System Grants Me Steel',
     src: videoUrl('百炼.mp4'),
     poster:'./images/百炼.jpg',
-    link:'#', likes:3900, stars:'2.7万', likesCount:'1904' },
+    link:'#', heatWan:3900, favoriteCount:'2.7万', likeCount:'1904' },
 
   { id:'yumon', type:'video', size:'md',
     category:'AI漫剧', categoryEn:'AI Comic',
     title:'一秒一进化点，御兽全是恒星级', titleEn:'One Second One Evolution',
     src: videoUrl('进化点.mp4'),
     poster:'./images/进化点.jpg',
-    link:'#', likes:3700, stars:'2.8万', likesCount:'2997' },
+    link:'#', heatWan:3700, favoriteCount:'2.8万', likeCount:'2997' },
 
   /* ========== 海外短剧 ========== */
   { id:'overseas-drama', type:'video', size:'lg',
     category:'海外短剧', categoryEn:'Overseas Short Dramas',
     title:'海外', titleEn:'Overseas Short Drama',
     src: videoUrl('海外.mp4'),
-    link:'#', likes:0, stars:'——', likesCount:'——' },
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
 
   { id:'overseas-drama-sample', type:'video', size:'lg',
     category:'海外短剧', categoryEn:'Overseas Short Dramas',
     title:'海外样片', titleEn:'Overseas Drama Sample',
     src: videoUrl('海外样片.mp4'),
-    link:'#', likes:0, stars:'——', likesCount:'——' },
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
 
   /* ========== 3D建模图片 ========== */
   /* 3D 图片统一存放在 ./images/，与凡人.jpg 使用同一资源目录 */
@@ -2082,35 +2084,35 @@ const MEDIA = [
     title:'孩子改姓后，她错失了千亿家产', titleEn:'A Name, A Fortune',
     src: videoUrl('孩子改姓.mp4'),
     poster:'./images/qianjin.jpg',
-    link:'#', likes:0, stars:'——', likesCount:'——' },
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
 
   { id:'gongdi', type:'video', size:'md',
     category:'待上线', categoryEn:'Upcoming',
     title:'工地断夫双腿，称和AI签订千万赔偿', titleEn:'The AI Contract',
     src: videoUrl('工地断腿.mp4'),
     poster:'./images/gongdi.jpg',
-    link:'#', likes:0, stars:'——', likesCount:'——' },
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
 
   { id:'nvjiangjun', type:'video', size:'sm',
     category:'待上线', categoryEn:'Upcoming',
     title:'女将军凯旋归来，奶娘全家慌了', titleEn:'The General Returns',
     src: videoUrl('女将军凯旋.mp4'),
     poster:'./images/nvjiangjun.jpg',
-    link:'#', likes:0, stars:'——', likesCount:'——' },
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
 
   { id:'houyuan', type:'video', size:'sm',
     category:'待上线', categoryEn:'Upcoming',
     title:'后院有狼，禁止入内', titleEn:'Beware of the Wolf',
     src: videoUrl('后院有狼.mp4'),
     poster:'./images/houyuan.jpg',
-    link:'#', likes:0, stars:'——', likesCount:'——' },
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
 
   { id:'shanhun', type:'video', size:'md',
     category:'待上线', categoryEn:'Upcoming',
     title:'八零闪婚，我的病弱老公深藏不露', titleEn:'Flash Marriage 80s',
     src: videoUrl('八零闪婚.mp4'),
     poster:'./images/shanhun.jpg',
-    link:'#', likes:0, stars:'——', likesCount:'——' }
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' }
 ];
 
 const CAT_ORDER = ['AI真人剧', 'AI漫剧', '海外短剧', '3D建模图片', '待上线'];
@@ -2157,12 +2159,19 @@ function formatCount(n) {
   return String(n);
 }
 
-const likeCountOf = (it) => {
-  const base = parseCount(it.likesCount);
-  return base + (likedSet.has(it.id) ? 1 : 0);
-};
+/* 平台数据字段严格分离：
+   heatWan = 热度（单位：万）
+   likeCount = 平台点赞数
+   favoriteCount = 平台收藏数
+   访客在本站点击点赞/收藏只改变本地状态，不篡改平台原始数据。 */
+function metricCountLabel(value) {
+  if (value === undefined || value === null || value === '' || value === '——') return '——';
+  return formatCount(parseCount(value));
+}
 
-const isHit = (it) => (it.likes || 0) >= HIT_THRESHOLD;
+const likeCountLabel = (it) => metricCountLabel(it.likeCount);
+const favoriteCountLabel = (it) => metricCountLabel(it.favoriteCount);
+const isHit = (it) => (it.heatWan || 0) >= HIT_THRESHOLD;
 
 function formatHeat(n) { if (!n) return '待上线'; return n + '万'; }
 
@@ -2776,11 +2785,12 @@ function cardHTML(item, index) {
 
 
   const liked = likedSet.has(item.id);
-  const count = likeCountOf(item);
+  const likeCount = likeCountLabel(item);
+  const favoriteCount = favoriteCountLabel(item);
   const catEn = item.categoryEn || CAT_EN[item.category] || item.category;
   const hit = isHit(item);
   const heatLabel = item.type === 'video'
-    ? (item.likes ? '热度 ' + formatHeat(item.likes) : '待上线')
+    ? (item.heatWan ? '热度 ' + formatHeat(item.heatWan) : '待上线')
     : '图片展示';
   const no = String(index + 1).padStart(2, '0');
 
@@ -2823,13 +2833,15 @@ function cardHTML(item, index) {
           <span class="card__no">${no}</span>
           <div class="card__meta">
             <div class="card__stats">
-              <span class="stat stat--star" data-star-count>
-                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                ${item.stars || '——'}
+              <span class="stat stat--favorite" title="平台收藏数">
+                <svg viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.2L5 21V4a1 1 0 0 1 1-1z"/></svg>
+                <span class="stat__label">收藏</span>
+                <span class="stat__value">${favoriteCount}</span>
               </span>
-              <span class="stat stat--like">
+              <span class="stat stat--like" title="平台点赞数">
                 <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                ${formatCount(count)}
+                <span class="stat__label">点赞</span>
+                <span class="stat__value" data-like-count>${likeCount}</span>
               </span>
             </div>
             <div class="card__meta-main">
@@ -2842,12 +2854,11 @@ function cardHTML(item, index) {
               </div>
               <button class="like-btn${liked ? ' is-liked' : ''}"
                       data-like="${item.id}" data-cursor="hover"
-                      aria-label="点赞 Like">
+                      aria-label="点赞 Like" aria-pressed="${liked}">
                 <svg viewBox="0 0 24 24">
                   <path d="M12 21s-7.5-4.6-9.5-9A5.3 5.3 0 0 1 12 6a5.3 5.3 0 0 1 9.5 6c-2 4.4-9.5 9-9.5 9z"/>
                 </svg>
-                <span data-like-count>${formatCount(count)}</span>
-                <span class="plus-one">+1</span>
+                <span data-like-count>${likeCount}</span>
               </button>
             </div>
           </div>
@@ -3131,14 +3142,6 @@ function bindCards(container) {
   renderGallery();
 })();
 
-function bumpLikeBtn(btn) {
-  if (!btn) return;
-  btn.classList.remove('bump');
-  void btn.offsetWidth;
-  btn.classList.add('bump');
-  setTimeout(() => btn.classList.remove('bump'), 1000);
-}
-
 function toggleLike(id) {
   const item = findItem(id); if (!item) return;
   const wasLiked = likedSet.has(id);
@@ -3147,26 +3150,11 @@ function toggleLike(id) {
 
   document.querySelectorAll(`[data-like="${id}"]`).forEach(btn => {
     btn.classList.toggle('is-liked', !wasLiked);
-    const cnt = btn.querySelector('[data-like-count]');
-    if (cnt) cnt.textContent = formatCount(likeCountOf(item));
-    if (!wasLiked) bumpLikeBtn(btn);
-
-    const card = btn.closest('.card');
-    if (card) {
-      const statLike = card.querySelector('.card__stats .stat--like');
-      if (statLike) {
-        const svg = statLike.querySelector('svg');
-        const newText = formatCount(likeCountOf(item));
-        statLike.innerHTML = '';
-        if (svg) statLike.appendChild(svg);
-        statLike.appendChild(document.createTextNode(' ' + newText));
-      }
-    }
+    btn.setAttribute('aria-pressed', String(!wasLiked));
   });
 
   if (state.list[state.index] && state.list[state.index].id === id) {
     syncLightbox();
-    if (!wasLiked) bumpLikeBtn($('lbLike'));
   }
 
   toast(wasLiked ? '已取消点赞' : '已点赞',
@@ -3215,7 +3203,7 @@ function showSlide(index) {
   const item = state.list[state.index];
   const catEn = item.categoryEn || CAT_EN[item.category] || '';
   const metaLabel = item.type === 'video'
-    ? '热度 ' + (item.likes ? formatHeat(item.likes) : '待上线')
+    ? '热度 ' + (item.heatWan ? formatHeat(item.heatWan) : '待上线')
     : '图片展示';
 
   let stageHTML;
@@ -3254,10 +3242,15 @@ function showSlide(index) {
 function syncLightbox() {
   const item = state.list[state.index]; if (!item) return;
   const liked = likedSet.has(item.id), saved = savedSet.has(item.id);
-  $('lbLike').classList.toggle('is-active', liked);
-  $('lbLikeCount').textContent = formatCount(likeCountOf(item));
-  $('lbSave').classList.toggle('is-active', saved);
-  $('lbSave').lastChild.textContent = saved ? ' 已收藏 ' : ' 收藏 ';
+  const likeBtn = $('lbLike'), saveBtn = $('lbSave');
+
+  likeBtn.classList.toggle('is-active', liked);
+  likeBtn.setAttribute('aria-pressed', String(liked));
+  $('lbLikeCount').textContent = likeCountLabel(item);
+
+  saveBtn.classList.toggle('is-active', saved);
+  saveBtn.setAttribute('aria-pressed', String(saved));
+  $('lbSaveCount').textContent = favoriteCountLabel(item);
 }
 
 (function initLightbox() {

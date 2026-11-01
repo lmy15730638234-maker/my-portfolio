@@ -1150,6 +1150,226 @@ body.loaded .hero__foot{opacity:1;transform:none}
   *,*::before,*::after{animation-duration:.01ms!important;
     animation-iteration-count:1!important;transition-duration:.01ms!important;}
 }
+
+/* ================================================================
+   3D 建模图片卡片：原比例完整展示，不显示点赞/收藏等视频数据
+   ================================================================ */
+.card--3d-image .image-card__trigger{
+  display:block;
+  width:100%;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:inherit;
+  text-align:left;
+  font:inherit;
+  cursor:pointer;
+}
+.card--3d-image .image-card__media{
+  display:block;
+  width:100%;
+  height:auto;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:3px;
+  background:var(--bg-soft);
+  transition:border-color .6s var(--ease),transform .85s var(--ease),
+             box-shadow .85s var(--ease);
+}
+.card--3d-image .image-card__media img{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:none;
+  object-fit:contain;
+  object-position:center;
+  filter:none;
+  transform:none;
+  transition:transform .9s var(--ease-img);
+}
+.card--3d-image:hover .image-card__media{
+  border-color:rgba(201,168,106,.48);
+  transform:translateY(-5px);
+  box-shadow:0 28px 60px -34px rgba(0,0,0,.95),
+             0 0 0 1px rgba(201,168,106,.10);
+}
+.card--3d-image:hover .image-card__media img{
+  transform:scale(1.015);
+}
+.card--3d-image .image-card__caption{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:baseline;
+  gap:5px 14px;
+  padding:13px 2px 3px;
+}
+.card--3d-image .image-card__title{
+  font-family:var(--font-serif);
+  font-size:17px;
+  line-height:1.4;
+  letter-spacing:.03em;
+  color:var(--text);
+}
+.card--3d-image .image-card__en{
+  grid-column:1;
+  font-size:9px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+.card--3d-image .image-card__hint{
+  grid-column:2;
+  grid-row:1 / span 2;
+  align-self:center;
+  font-size:9px;
+  letter-spacing:.12em;
+  color:var(--gold);
+  white-space:nowrap;
+}
+.card--3d-image .image-card__hint span{
+  display:block;
+  margin-top:3px;
+  color:var(--dim);
+  font-size:8px;
+  letter-spacing:.18em;
+}
+
+/* 独立 3D 图片灯箱：不复用视频 lightbox 的播放器、点赞、收藏和分享控件 */
+.image-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:470;
+  display:grid;
+  place-items:center;
+  padding:64px clamp(18px,5vw,76px) 34px;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .45s var(--ease),visibility .45s;
+}
+.image-lightbox.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.image-lightbox__backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(4,4,6,.96);
+  backdrop-filter:blur(24px) saturate(115%);
+  -webkit-backdrop-filter:blur(24px) saturate(115%);
+}
+.image-lightbox__figure{
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:15px;
+  width:min(1400px,94vw);
+  max-height:92vh;
+  margin:0;
+}
+.image-lightbox__image{
+  display:block;
+  width:auto;
+  height:auto;
+  max-width:100%;
+  max-height:calc(88vh - 62px);
+  object-fit:contain;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 50px 120px -45px rgba(0,0,0,.98);
+}
+.image-lightbox__caption{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:18px;
+  width:100%;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.12);
+}
+.image-lightbox__title{
+  font-family:var(--font-serif);
+  font-size:18px;
+  font-weight:400;
+  letter-spacing:.06em;
+  color:var(--text);
+}
+.image-lightbox__en{
+  display:block;
+  margin-top:4px;
+  color:var(--dim);
+  font-size:9px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+}
+.image-lightbox__count{
+  color:var(--gold);
+  font-size:10px;
+  letter-spacing:.2em;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.image-lightbox__close,
+.image-lightbox__nav{
+  position:absolute;
+  z-index:2;
+  display:grid;
+  place-items:center;
+  width:46px;
+  height:46px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:50%;
+  background:rgba(0,0,0,.45);
+  color:#fff;
+  font-family:var(--font-sans);
+  transition:background .3s,border-color .3s,color .3s,transform .3s;
+  cursor:pointer;
+}
+.image-lightbox__close{
+  top:22px;
+  right:clamp(18px,3vw,42px);
+  font-size:18px;
+}
+.image-lightbox__nav{
+  top:50%;
+  transform:translateY(-50%);
+  font-size:30px;
+  line-height:1;
+}
+.image-lightbox__prev{left:clamp(12px,2.5vw,36px)}
+.image-lightbox__next{right:clamp(12px,2.5vw,36px)}
+.image-lightbox__close:hover,
+.image-lightbox__nav:hover{
+  background:var(--gold);
+  border-color:var(--gold);
+  color:#08080a;
+}
+.image-lightbox__nav:hover{transform:translateY(-50%) scale(1.06)}
+body.image-lightbox-open{overflow:hidden}
+body.has-cursor.image-lightbox-open .cursor,
+body.has-cursor.image-lightbox-open .cursor-dot{
+  opacity:0!important;
+  visibility:hidden!important;
+}
+body.has-cursor.image-lightbox-open,
+body.has-cursor.image-lightbox-open *{
+  cursor:default!important;
+}
+body.has-cursor.image-lightbox-open .image-lightbox button{
+  cursor:pointer!important;
+}
+@media(max-width:700px){
+  .image-lightbox{padding:58px 14px 22px}
+  .image-lightbox__figure{width:96vw;max-height:90vh}
+  .image-lightbox__image{max-height:calc(84vh - 56px)}
+  .image-lightbox__close,.image-lightbox__nav{width:40px;height:40px}
+  .image-lightbox__prev{left:8px}
+  .image-lightbox__next{right:8px}
+  .image-lightbox__caption{padding:10px 4px 0}
+}
+
 </style>
 </head>
 
@@ -1660,6 +1880,28 @@ body.loaded .hero__foot{opacity:1;transform:none}
   </div>
 </div>
 
+
+<div class="image-lightbox" id="imageLightbox" aria-hidden="true"
+     role="dialog" aria-modal="true" aria-label="3D建模图片预览">
+  <div class="image-lightbox__backdrop" data-image-close></div>
+  <button class="image-lightbox__close" type="button" data-image-close
+          aria-label="关闭图片预览 Close">×</button>
+  <button class="image-lightbox__nav image-lightbox__prev" id="imageLbPrev"
+          type="button" aria-label="上一张 Previous">‹</button>
+  <figure class="image-lightbox__figure">
+    <img class="image-lightbox__image" id="imageLightboxImage" src="" alt="">
+    <figcaption class="image-lightbox__caption">
+      <div>
+        <div class="image-lightbox__title" id="imageLightboxTitle"></div>
+        <span class="image-lightbox__en" id="imageLightboxEn"></span>
+      </div>
+      <span class="image-lightbox__count" id="imageLightboxCount"></span>
+    </figcaption>
+  </figure>
+  <button class="image-lightbox__nav image-lightbox__next" id="imageLbNext"
+          type="button" aria-label="下一张 Next">›</button>
+</div>
+
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script>
@@ -1764,6 +2006,66 @@ const MEDIA = [
     poster:'./images/进化点.jpg',
     link:'#', likes:3700, stars:'2.8万', likesCount:'2997' },
 
+  /* ========== 海外短剧 ========== */
+  /* 新增海外短剧时使用 type:'video', category:'海外短剧' */
+
+  /* ========== 3D建模图片 ========== */
+  /* 3D 图片统一存放在 ./images/，与凡人.jpg 使用同一资源目录 */
+  { id:'3d-toilet', type:'image', size:'sm',
+    category:'3D建模图片', categoryEn:'3D Modeling',
+    title:'厕所', titleEn:'Toilet Scene',
+    src:'./images/厕所.png' },
+
+  { id:'3d-ancient-town', type:'image', size:'lg',
+    category:'3D建模图片', categoryEn:'3D Modeling',
+    title:'古城', titleEn:'Ancient Town',
+    src:'./images/古城.png' },
+
+  { id:'3d-keyboard', type:'image', size:'sm',
+    category:'3D建模图片', categoryEn:'3D Modeling',
+    title:'键盘', titleEn:'Keyboard',
+    src:'./images/键盘.png' },
+
+  { id:'3d-mushroom', type:'image', size:'sm',
+    category:'3D建模图片', categoryEn:'3D Modeling',
+    title:'蘑菇屋', titleEn:'Mushroom House',
+    src:'./images/蘑菇屋.png' },
+
+  { id:'3d-three-render-two', type:'image', size:'md',
+    category:'3D建模图片', categoryEn:'3D Modeling',
+    title:'三渲二', titleEn:'3D-to-2D Rendering',
+    src:'./images/三渲二.png' },
+
+  { id:'3d-tea-party', type:'image', size:'lg',
+    category:'3D建模图片', categoryEn:'3D Modeling',
+    title:'茶话会', titleEn:'Tea Party',
+    src:'./images/茶话会.png' },
+
+  { id:'3d-room', type:'image', size:'sm',
+    category:'3D建模图片', categoryEn:'3D Modeling',
+    title:'房间', titleEn:'The Room',
+    src:'./images/房间.png' },
+
+  { id:'3d-gourd-spirit', type:'image', size:'sm',
+    category:'3D建模图片', categoryEn:'3D Modeling',
+    title:'瓜巫小灵', titleEn:'Gourd Spirit',
+    src:'./images/瓜巫小灵.png' },
+
+  { id:'3d-rainbow-midnight-station', type:'image', size:'lg',
+    category:'3D建模图片', categoryEn:'3D Modeling',
+    title:'虹霓深夜驿站', titleEn:'Rainbow Midnight Station',
+    src:'./images/虹霓深夜驿站.png' },
+
+  { id:'3d-starry-island', type:'image', size:'lg',
+    category:'3D建模图片', categoryEn:'3D Modeling',
+    title:'星夜奇幻岛', titleEn:'Starry Night Fantasy Island',
+    src:'./images/星夜奇幻岛.png' },
+
+  { id:'3d-christmas-shop', type:'image', size:'lg',
+    category:'3D建模图片', categoryEn:'3D Modeling',
+    title:'圣诞童话小铺', titleEn:'Christmas Fairy Tale Shop',
+    src:'./images/圣诞童话小铺.png' },
+
   /* ========== 待上线 ========== */
   { id:'qianjin', type:'video', size:'sm',
     category:'待上线', categoryEn:'Upcoming',
@@ -1801,12 +2103,14 @@ const MEDIA = [
     link:'#', likes:0, stars:'——', likesCount:'——' }
 ];
 
-const CAT_ORDER = ['AI真人剧', 'AI漫剧', '待上线'];
+const CAT_ORDER = ['AI真人剧', 'AI漫剧', '海外短剧', '3D建模图片', '待上线'];
 
 const CAT_EN = {
   '全部':'All',
   'AI真人剧':'AI Live-Action',
   'AI漫剧':'AI Comic',
+  '海外短剧':'Overseas Short Dramas',
+  '3D建模图片':'3D Modeling Images',
   '待上线':'Upcoming'
 };
 
@@ -2435,41 +2739,39 @@ const headIO = new IntersectionObserver(entries => {
 document.querySelectorAll('.sec-head').forEach(el => headIO.observe(el));
 document.querySelectorAll('.timeline__item').forEach(el => io.observe(el));
 
-/* ★ 专门用于手机端判断视频是否在屏幕正中间的观察器 */
-const mobileAutoPlayObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    const video = entry.target;
-    if (entry.isIntersecting) {
-      // 进入屏幕中间区域，静音自动播放
-      const p = video.play();
-      if (p && p.catch) p.catch(() => {});
-    } else {
-      // 离开屏幕中间区域，暂停并重置进度
-      video.pause();
-      try { video.currentTime = 0; } catch(e) {}
-      const card = video.closest('.card');
-      if (card) {
-        const pFill = card.querySelector('[data-progress-fill]');
-        const pHandle = card.querySelector('[data-progress-handle]');
-        if (pFill) pFill.style.width = '0%';
-        if (pHandle) pHandle.style.left = '0%';
-      }
-    }
-  });
-}, {
-  root: null,
-  // 上下各缩进 35%，意味着只有当视频处于屏幕正中央的 30% 区域时，才会触发播放
-  rootMargin: '-35% 0px -35% 0px', 
-  threshold: 0.5
-});
-
 function cardHTML(item, index) {
   const isVideo = item.type === 'video';
+  const is3DImage = item.type === 'image' && item.category === '3D建模图片';
+  if (is3DImage) {
+    const no = String(index + 1).padStart(2, '0');
+    return `
+      <article class="card card--3d-image" data-size="${item.size || 'sm'}"
+               data-id="${item.id}" data-type="image" data-category="3D建模图片">
+        <div class="card__inner">
+          <button class="image-card__trigger" type="button"
+                  data-open-image="${item.id}"
+                  aria-label="查看大图：${item.title}">
+            <span class="image-card__media">
+              <img src="${item.src}" alt="${item.title} / ${item.titleEn}" loading="lazy">
+            </span>
+            <span class="image-card__caption">
+              <span class="image-card__title">${item.title}</span>
+              <span class="image-card__en">${item.titleEn || ''}</span>
+              <span class="image-card__hint">点击查看大图<span>VIEW IMAGE</span></span>
+            </span>
+          </button>
+        </div>
+      </article>`;
+  }
+
+
   const liked = likedSet.has(item.id);
   const count = likeCountOf(item);
   const catEn = item.categoryEn || CAT_EN[item.category] || item.category;
   const hit = isHit(item);
-  const heatLabel = item.likes ? '热度 ' + formatHeat(item.likes) : '待上线';
+  const heatLabel = item.type === 'video'
+    ? (item.likes ? '热度 ' + formatHeat(item.likes) : '待上线')
+    : '图片展示';
   const no = String(index + 1).padStart(2, '0');
 
   const media = isVideo
@@ -2559,27 +2861,18 @@ function bindCards(container) {
         try { video.currentTime = 0.001; } catch(e) {}
       }, { once: true });
 
-      // ★ 判断是否为触屏设备（手机/平板）
-      const isMobileDevice = !isFinePointer;
+      card.addEventListener('mouseenter', () => {
+        const p = video.play();
+        if (p && p.catch) p.catch(() => {});
+      });
 
-      if (isMobileDevice) {
-        // 手机端：使用观察器，滑到中间自动播放
-        mobileAutoPlayObserver.observe(video);
-      } else {
-        // 电脑端：保持原有的鼠标悬停播放逻辑
-        card.addEventListener('mouseenter', () => {
-          const p = video.play();
-          if (p && p.catch) p.catch(() => {});
-        });
-
-        card.addEventListener('mouseleave', () => {
-          if (card.classList.contains('is-dragging')) return;
-          video.pause();
-          try { video.currentTime = 0; } catch(e) {}
-          if (progressFill) progressFill.style.width = '0%';
-          if (progressHandle) progressHandle.style.left = '0%';
-        });
-      }
+      card.addEventListener('mouseleave', () => {
+        if (card.classList.contains('is-dragging')) return;
+        video.pause();
+        try { video.currentTime = 0; } catch(e) {}
+        if (progressFill) progressFill.style.width = '0%';
+        if (progressHandle) progressHandle.style.left = '0%';
+      });
 
       video.addEventListener('timeupdate', () => {
         if (!progressFill) return;
@@ -2738,6 +3031,10 @@ function bindCards(container) {
         toggleLike(likeBtn.dataset.like);
         return;
       }
+      if (card.classList.contains('card--3d-image')) {
+        openImageLightbox(card.dataset.id);
+        return;
+      }
       const id = card.dataset.id;
       const idx = state.list.findIndex(m => m.id === id);
       openLightbox(idx < 0 ? 0 : idx);
@@ -2783,9 +3080,12 @@ function bindCards(container) {
     }
 
     if (countEl) {
+      const countUnit = state.filter === '3D建模图片'
+        ? '张图片'
+        : state.filter === '全部' ? '件作品' : '部作品';
       countEl.innerHTML =
-        `${String(state.list.length).padStart(2,'0')} 部作品` +
-        `<span class="en">Titles</span>`;
+        `${String(state.list.length).padStart(2,'0')} ${countUnit}` +
+        `<span class="en">Works</span>`;
     }
 
     if (!state.list.length) {
@@ -2876,7 +3176,11 @@ function toggleSave(id) {
 
 function openLightbox(index) {
   const box = $('lightbox'); if (!box) return;
-  state.index = index; showSlide(index);
+  const selected = state.list[index];
+  if (!selected || selected.type !== 'video') return;
+  state.list = state.list.filter(item => item.type === 'video');
+  state.index = state.list.findIndex(item => item.id === selected.id);
+  showSlide(state.index);
   box.classList.add('open');
   box.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
@@ -2900,7 +3204,9 @@ function showSlide(index) {
   state.index = (index + total) % total;
   const item = state.list[state.index];
   const catEn = item.categoryEn || CAT_EN[item.category] || '';
-  const heatLabel = item.likes ? formatHeat(item.likes) : '待上线';
+  const metaLabel = item.type === 'video'
+    ? '热度 ' + (item.likes ? formatHeat(item.likes) : '待上线')
+    : '图片展示';
 
   let stageHTML;
   if (item.embed) {
@@ -2919,7 +3225,7 @@ function showSlide(index) {
   $('lbTitle').textContent = item.title;
   $('lbTitleEn').textContent = item.titleEn || '';
   $('lbMeta').textContent =
-    `${item.category} / ${catEn} · 热度 ${heatLabel} · ` +
+    `${item.category} / ${catEn} · ${metaLabel} · ` +
     `${String(state.index+1).padStart(2,'0')} / ${String(total).padStart(2,'0')}`;
 
   const hgBtn = $('lbHongguo');
@@ -2974,6 +3280,83 @@ function syncLightbox() {
   }, { passive:true });
 })();
 
+
+let imageLightboxIndex = 0;
+
+function get3DImageItems() {
+  return MEDIA.filter(item => item.type === 'image' && item.category === '3D建模图片');
+}
+
+function render3DImageLightbox() {
+  const items = get3DImageItems();
+  if (!items.length) return;
+  imageLightboxIndex = (imageLightboxIndex + items.length) % items.length;
+  const item = items[imageLightboxIndex];
+  const image = $('imageLightboxImage');
+  image.src = item.src;
+  image.alt = `${item.title} / ${item.titleEn || ''}`;
+  $('imageLightboxTitle').textContent = item.title;
+  $('imageLightboxEn').textContent = item.titleEn || '';
+  $('imageLightboxCount').textContent =
+    `${String(imageLightboxIndex + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
+  $('imageLbPrev').style.display = items.length > 1 ? '' : 'none';
+  $('imageLbNext').style.display = items.length > 1 ? '' : 'none';
+}
+
+function openImageLightbox(id) {
+  const items = get3DImageItems();
+  const index = items.findIndex(item => item.id === id);
+  if (index < 0) return;
+  imageLightboxIndex = index;
+  render3DImageLightbox();
+  const box = $('imageLightbox');
+  box.classList.add('open');
+  box.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('image-lightbox-open');
+}
+
+function closeImageLightbox() {
+  const box = $('imageLightbox');
+  if (!box || !box.classList.contains('open')) return;
+  box.classList.remove('open');
+  box.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('image-lightbox-open');
+  setTimeout(() => {
+    if (!box.classList.contains('open')) $('imageLightboxImage').removeAttribute('src');
+  }, 450);
+}
+
+(function init3DImageLightbox() {
+  const box = $('imageLightbox');
+  if (!box) return;
+
+  box.querySelectorAll('[data-image-close]').forEach(el =>
+    el.addEventListener('click', closeImageLightbox));
+
+  $('imageLbPrev').addEventListener('click', () => {
+    imageLightboxIndex--;
+    render3DImageLightbox();
+  });
+  $('imageLbNext').addEventListener('click', () => {
+    imageLightboxIndex++;
+    render3DImageLightbox();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!box.classList.contains('open')) return;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeImageLightbox();
+    } else if (e.key === 'ArrowLeft') {
+      imageLightboxIndex--;
+      render3DImageLightbox();
+    } else if (e.key === 'ArrowRight') {
+      imageLightboxIndex++;
+      render3DImageLightbox();
+    }
+  });
+})();
+
 async function shareItem(item) {
   const url = item.link && item.link !== '#' ? item.link : location.href;
   const data = {
@@ -3007,7 +3390,6 @@ initScrollSpy();
 (function initAnchorNavigation(){
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', function(e){
-      // PDF下载的拦截已被删除，现在直接跳转
       const href = this.getAttribute('href') || '';
       if (href === '#') {
         e.preventDefault();

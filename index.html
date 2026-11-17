@@ -1341,13 +1341,13 @@ body.image-lightbox-open{overflow:hidden}
     </div>
 
     <p class="sec-lead">
-      累计参与 10+ 部 AI 漫剧、10+ 部国内真人剧制作，另参与 2 部海外真人短剧及海外样片。
-      所有作品均可悬停预览播放，拖动顶部进度条可跳转任意片段。
+      累计参与 10+ 部 AI 漫剧、10+ 部国内真人剧制作，并制作海外短剧、3D 建模视频与三维场景图片。
+      视频作品可悬停预览并拖动顶部进度条选段；3D 图片可点击放大查看。
     </p>
     <p class="sec-lead-en">
-      10+ AI comic dramas, 10+ domestic live-action dramas,
-      2 overseas titles and overseas samples. Hover to preview;
-      drag the top progress bar to jump to any moment.
+      10+ AI comic dramas, 10+ domestic live-action dramas, overseas short films,
+      3D modeling videos and 3D images. Hover over videos to preview;
+      click 3D images to view in full.
     </p>
 
     <div class="toolbar">
@@ -1891,6 +1891,37 @@ const MEDIA = [
     src: videoUrl('海外样片.mp4'),
     link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
 
+  { id:'overseas-drama-one', type:'video', size:'lg',
+    category:'海外短剧', categoryEn:'Overseas Short Dramas',
+    title:'海外-1', titleEn:'Overseas Drama 1',
+    src: videoUrl('海外-1.mp4'),
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
+
+  { id:'overseas-drama-new', type:'video', size:'lg',
+    category:'海外短剧', categoryEn:'Overseas Short Dramas',
+    title:'海外短剧', titleEn:'Overseas Short Drama',
+    src: videoUrl('海外短剧.mp4'),
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
+
+  /* ========== 3D建模视频 ========== */
+  { id:'3d-blender-modeling', type:'video', size:'lg',
+    category:'3D建模视频', categoryEn:'3D Modeling Videos',
+    title:'blender建模', titleEn:'Blender Modeling',
+    src: videoUrl('blender建模.mp4'),
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
+
+  { id:'3d-ancient-city-video', type:'video', size:'lg',
+    category:'3D建模视频', categoryEn:'3D Modeling Videos',
+    title:'古城视频', titleEn:'Ancient City · 3D Video',
+    src: videoUrl('古城视频.mp4'),
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
+
+  { id:'3d-advertising-video', type:'video', size:'lg',
+    category:'3D建模视频', categoryEn:'3D Modeling Videos',
+    title:'广告宣传', titleEn:'Promotional Video',
+    src: videoUrl('广告宣传.mp4'),
+    link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' },
+
   /* ========== 3D建模图片 ========== */
   { id:'3d-toilet', type:'image', size:'sm',
     category:'3D建模图片', categoryEn:'3D Modeling',
@@ -1984,13 +2015,14 @@ const MEDIA = [
     link:'#', heatWan:0, favoriteCount:'——', likeCount:'——' }
 ];
 
-const CAT_ORDER = ['AI真人剧', 'AI漫剧', '海外短剧', '3D建模图片', '待上线'];
+const CAT_ORDER = ['AI真人剧', 'AI漫剧', '海外短剧', '3D建模视频', '3D建模图片', '待上线'];
 
 const CAT_EN = {
   '全部':'All',
   'AI真人剧':'AI Live-Action',
   'AI漫剧':'AI Comic',
   '海外短剧':'Overseas Short Dramas',
+  '3D建模视频':'3D Modeling Videos',
   '3D建模图片':'3D Modeling Images',
   '待上线':'Upcoming'
 };
@@ -2692,7 +2724,7 @@ function cardHTML(item, index) {
   const catEn = item.categoryEn || CAT_EN[item.category] || item.category;
   const hit = isHit(item);
   const heatLabel = item.type === 'video'
-    ? (item.heatWan ? '热度 ' + formatHeat(item.heatWan) : '待上线')
+    ? (item.heatWan ? '热度 ' + formatHeat(item.heatWan) : (item.category === '待上线' ? '待上线' : '作品预览'))
     : '图片展示';
   const no = String(index + 1).padStart(2, '0');
 
@@ -3137,7 +3169,7 @@ function showSlide(index) {
   const item = state.list[state.index];
   const catEn = item.categoryEn || CAT_EN[item.category] || '';
   const metaLabel = item.type === 'video'
-    ? '热度 ' + (item.heatWan ? formatHeat(item.heatWan) : '待上线')
+    ? (item.heatWan ? '热度 ' + formatHeat(item.heatWan) : (item.category === '待上线' ? '待上线' : '作品预览'))
     : '图片展示';
 
   let stageHTML;
